@@ -1,0 +1,1 @@
+Começando do 0 o app de gerenciamento de clinicas 
