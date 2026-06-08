@@ -1,36 +1,74 @@
 # Arquitetura
 
+## Objetivo
+
+Aplicação web para gerenciamento de agendamentos entre pacientes e clínicas.
+
 ## Frontend
 
-- Angular 18+
-- Angular Material
-- RxJS
-- Signals
+Tecnologias:
+
+* Angular
+* Angular Material
+* TypeScript
+
+Responsabilidades:
+
+* Cadastro de usuários
+* Login
+* Busca de clínicas
+* Solicitação de agendamentos
+* Gerenciamento de agendamentos
 
 ## Backend
 
-- Node.js
-- NestJS
-- Prisma ORM
+Tecnologias:
+
+* Node.js
+* Express.js
+* TypeScript
+
+Responsabilidades:
+
+* API REST
+* Autenticação
+* Gerenciamento de usuários
+* Gerenciamento de clínicas
+* Gerenciamento de agendamentos
 
 ## Banco de Dados
 
-- PostgreSQL
+Tecnologia:
 
-## Armazenamento de Imagens
+* PostgreSQL
 
-- AWS S3 ou Cloudinary
+Tabelas principais:
+
+* Pacientes
+* Clínicas
+* Especialidades
+* Agendamentos
 
 ## Autenticação
 
-- JWT
-- Refresh Token
+* JWT
+* Senhas criptografadas com bcrypt
 
-## Notificações
+## Upload de Imagens
 
-- WebSocket (Socket.IO)
+* Armazenamento local em pasta uploads/
 
-## Testes
+## Fluxo de Agendamento
 
-- Jest
-- Cypress
+1. Paciente pesquisa clínica.
+2. Paciente solicita agendamento.
+3. Agendamento fica com status PENDENTE.
+4. Clínica aceita ou recusa.
+5. Status é atualizado para ACEITO ou RECUSADO.
+6. Paciente visualiza o resultado ao acessar o sistema.
+
+## Status do Agendamento
+
+* PENDENTE
+* ACEITO
+* RECUSADO
