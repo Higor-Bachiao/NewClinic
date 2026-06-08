@@ -8,8 +8,9 @@ Aplicação web para gerenciamento de agendamentos entre pacientes e clínicas.
 
 Tecnologias:
 
-* Angular
-* Angular Material
+* React
+* Vite
+* React Router
 * TypeScript
 
 Responsabilidades:

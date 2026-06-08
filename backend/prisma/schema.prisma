@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id           String        @id @default(uuid())
+  fullName     String
+  username     String        @unique
+  cpf          String        @unique
+  email        String        @unique
+  passwordHash String
+  photoUrl     String?
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+}
+
+model Clinic {
+  id           String        @id @default(uuid())
+  clinicName   String
+  ownerName    String
+  cnpj         String        @unique
+  email        String        @unique
+  passwordHash String
+  photoUrl     String?
+  specialty    String
+  // Disponibilidade
+  openTime     String        @default("08:00")
+  closeTime    String        @default("18:00")
+  // Dias desabilitados (0=domingo ... 6=sabado), separados por virgula. Ex: "0,6"
+  disabledDays String        @default("")
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+}
+
+enum AppointmentStatus {
+  PENDENTE
+  ACEITO
+  RECUSADO
+}
+
+model Appointment {
+  id        String            @id @default(uuid())
+  patient   Patient           @relation(fields: [patientId], references: [id])
+  patientId String
+  clinic    Clinic            @relation(fields: [clinicId], references: [id])
+  clinicId  String
+  date      DateTime
+  reason    String?
+  status    AppointmentStatus @default(PENDENTE)
+  createdAt DateTime          @default(now())
+}
