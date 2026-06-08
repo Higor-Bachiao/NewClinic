@@ -1,4 +1,7 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+// Carrega .env da pasta env/ antes de importar módulos que usam Prisma
+dotenv.config({ path: `${process.cwd()}/env/.env` });
+
 import express from "express";
 import cors from "cors";
 import path from "path";

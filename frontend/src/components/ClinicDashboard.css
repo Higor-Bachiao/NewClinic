@@ -1,0 +1,34 @@
+:root{
+  --primary:#0b74ff;
+  --muted:#6b7280;
+  --bg:#ffffff;
+  --card-bg:#f8fafc;
+  --gap:16px;
+}
+.clinic-dashboard{padding:16px;font-family:Inter,system-ui,Arial;background:var(--bg)}
+.dashboard-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dashboard-header h2{margin:0;font-size:20px}
+.header-actions .btn{margin-left:8px}
+.dashboard-grid{display:grid;grid-template-columns:1fr 320px;gap:var(--gap);align-items:start}
+.card{background:var(--card-bg);padding:12px;border-radius:8px}
+.pending-list ul{list-style:none;margin:0;padding:0}
+.appointment-row{display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid rgba(0,0,0,0.04)}
+.ap-time{min-width:150px;color:var(--muted);font-size:13px}
+.ap-main{flex:1}
+.ap-patient{font-weight:600}
+.ap-meta{color:var(--muted);font-size:13px}
+.ap-actions .btn{padding:6px 10px}
+.right-column{display:flex;flex-direction:column;gap:12px}
+.timeslots{display:flex;flex-wrap:wrap;gap:8px}
+.timeslot{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);background:white}
+.timeslot.available{background:#ecf7ff;border-color:var(--primary);color:var(--primary)}
+.timeslot.busy{opacity:0.6}
+.specialties ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.specialties li{background:white;padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.04)}
+.btn{background:transparent;border:1px solid rgba(0,0,0,0.08);padding:8px 12px;border-radius:6px;cursor:pointer}
+.btn.primary{background:var(--primary);color:white;border-color:transparent}
+.empty{color:var(--muted);padding:12px}
+@media(max-width:900px){
+  .dashboard-grid{grid-template-columns:1fr}
+  .ap-time{min-width:110px}
+}
