@@ -1,0 +1,30 @@
+# Frontend
+
+Stack:
+
+- Angular
+- TypeScript
+- Angular Material
+
+Padrões:
+
+- Utilizar componentes standalone.
+- Utilizar Reactive Forms.
+- Utilizar Services para chamadas HTTP.
+- Separar páginas e componentes reutilizáveis.
+- Utilizar interfaces TypeScript para tipagem.
+
+Telas principais:
+
+- Login
+- Cadastro de Paciente
+- Cadastro de Clínica
+- Busca de Clínicas
+- Agendamentos do Paciente
+- Agendamentos da Clínica
+
+Priorizar:
+
+- Simplicidade
+- Responsividade básica
+- Código fácil de entender

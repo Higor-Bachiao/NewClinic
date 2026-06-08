@@ -1,0 +1,10 @@
+# Regras Gerais
+
+- Utilizar TypeScript em todo o projeto.
+- Gerar código simples e fácil de entender.
+- Priorizar legibilidade em vez de otimizações complexas.
+- Adicionar comentários apenas quando necessário.
+- Sempre validar entradas da API.
+- Seguir boas práticas de organização de código.
+- Criar testes unitários quando solicitado.
+- Não criar funcionalidades que não estejam especificadas em specs/.

@@ -1,0 +1,37 @@
+# Backend
+
+Stack:
+
+- Node.js
+- Express.js
+- TypeScript
+- PostgreSQL
+
+Padrões:
+
+- Arquitetura em camadas:
+  - Controllers
+  - Services
+  - Repositories
+
+- Utilizar JWT para autenticação.
+- Utilizar bcrypt para hash de senhas.
+- Utilizar async/await.
+- Tratar erros adequadamente.
+- Criar rotas RESTful.
+
+Entidades principais:
+
+- Paciente
+- Clínica
+- Especialidade
+- Agendamento
+
+Nunca gerar:
+
+- Microserviços
+- Redis
+- Mensageria
+- AWS
+- Docker
+- Arquiteturas complexas
