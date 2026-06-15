@@ -39,56 +39,13 @@ h2 { font-size: 24px; margin: 0 0 20px; }
 }
 .icon-inline { vertical-align: -4px; margin-right: 6px; color: var(--primary); }
 
-<<<<<<< HEAD
-/* Header (apenas marca + usuário, sem links de nav) */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 14px 24px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.header .brand { font-weight: 700; font-size: 18px; color: #2563eb; }
-.header-user { display: flex; align-items: center; gap: 14px; }
-
-/* Tabs de navegação centralizadas no conteúdo */
-.tab-bar {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 28px 0 28px;
-}
-
-.tab {
-  padding: 11px 32px;
-  border: 2px solid #e5e7eb;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  color: #374151;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
-.tab:hover { border-color: #2563eb; color: #2563eb; }
-.tab.active {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #fff;
-  font-weight: 600;
-}
-=======
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .container { max-width: 960px; margin: 0 auto; padding: 28px 16px; }
 
-/* ---------- Navbar ---------- */
-.navbar {
+/* ---------- Header ---------- */
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,19 +57,40 @@ a:hover { text-decoration: underline; }
   top: 0;
   z-index: 10;
 }
-.navbar a {
-  color: #fff;
-  font-weight: 500;
-  opacity: 0.92;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.header .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
+.header-user { display: flex; align-items: center; gap: 14px; }
+.header-user .muted { color: rgba(255, 255, 255, 0.85); }
+.header .btn.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
-.navbar a:hover { opacity: 1; text-decoration: none; }
-.navbar .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
-.nav-links { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.nav-greeting { display: inline-flex; align-items: center; gap: 6px; opacity: 0.95; }
->>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
+.header .btn.secondary:hover { background: rgba(255, 255, 255, 0.25); box-shadow: none; }
+
+/* ---------- Tabs de navegação ---------- */
+.tab-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 28px 0;
+}
+.tab {
+  padding: 11px 32px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.tab:hover { border-color: var(--primary); color: var(--primary); }
+.tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
 
 /* ---------- Cards ---------- */
 .card {
