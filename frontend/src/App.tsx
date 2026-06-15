@@ -1,33 +1,24 @@
-import { Routes, Route, Navigate, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./auth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SearchClinics from "./pages/SearchClinics";
 import Appointments from "./pages/Appointments";
 import Availability from "./pages/Availability";
-import { Role } from "./types";
+import ClinicReviews from "./pages/ClinicReviews";
 import { ReactNode } from "react";
 
-function Navbar() {
+function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   if (!user) return null;
 
   return (
-    <div className="navbar">
+    <div className="header">
       <span className="brand">NewClinic</span>
-      <div>
-        {user.role === "PATIENT" && <Link to="/buscar">Buscar Clinicas</Link>}
-        {user.role === "CLINIC" && <Link to="/disponibilidade">Disponibilidade</Link>}
-        <Link to="/agendamentos">Agendamentos</Link>
-        <span style={{ marginRight: 16 }}>Ola, {user.name}</span>
-        <button
-          className="btn secondary"
-          onClick={() => {
-            logout();
-            navigate("/login");
-          }}
-        >
+      <div className="header-user">
+        <span className="muted">Olá, {user.name}</span>
+        <button className="btn secondary" onClick={() => { logout(); navigate("/login"); }}>
           Sair
         </button>
       </div>
@@ -35,8 +26,40 @@ function Navbar() {
   );
 }
 
-// Protege rotas; opcionalmente restringe por papel
-function Protected({ children, role }: { children: ReactNode; role?: Role }) {
+function TabBar() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  if (!user) return null;
+
+  const tabs =
+    user.role === "PATIENT"
+      ? [
+          { label: "Buscar Clínicas", path: "/buscar" },
+          { label: "Meus Agendamentos", path: "/agendamentos" },
+        ]
+      : [
+          { label: "Agendamentos", path: "/agendamentos" },
+          { label: "Disponibilidade", path: "/disponibilidade" },
+          { label: "Avaliações", path: "/avaliacoes" },
+        ];
+
+  return (
+    <div className="tab-bar">
+      {tabs.map((t) => (
+        <button
+          key={t.path}
+          className={`tab${pathname === t.path ? " active" : ""}`}
+          onClick={() => navigate(t.path)}
+        >
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Protected({ children, role }: { children: ReactNode; role?: "PATIENT" | "CLINIC" }) {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
   if (role && user.role !== role) return <Navigate to="/agendamentos" replace />;
@@ -48,12 +71,12 @@ export default function App() {
 
   return (
     <>
-      <Navbar />
+      <Header />
       <div className="container">
+        <TabBar />
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/agendamentos" /> : <Login />} />
           <Route path="/cadastro" element={user ? <Navigate to="/agendamentos" /> : <Register />} />
-
           <Route
             path="/buscar"
             element={
@@ -78,7 +101,14 @@ export default function App() {
               </Protected>
             }
           />
-
+          <Route
+            path="/avaliacoes"
+            element={
+              <Protected role="CLINIC">
+                <ClinicReviews />
+              </Protected>
+            }
+          />
           <Route path="*" element={<Navigate to={user ? "/agendamentos" : "/login"} replace />} />
         </Routes>
       </div>

@@ -11,16 +11,47 @@ a { color: #2563eb; text-decoration: none; }
 
 .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
 
-.navbar {
+/* Header (apenas marca + usuário, sem links de nav) */
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #2563eb;
-  color: #fff;
-  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 14px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.navbar a { color: #fff; margin-right: 16px; }
-.navbar .brand { font-weight: 700; font-size: 18px; }
+.header .brand { font-weight: 700; font-size: 18px; color: #2563eb; }
+.header-user { display: flex; align-items: center; gap: 14px; }
+
+/* Tabs de navegação centralizadas no conteúdo */
+.tab-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 28px 0 28px;
+}
+
+.tab {
+  padding: 11px 32px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.tab:hover { border-color: #2563eb; color: #2563eb; }
+.tab.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
 
 .card {
   background: #fff;

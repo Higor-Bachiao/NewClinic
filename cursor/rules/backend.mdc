@@ -6,26 +6,27 @@ Stack:
 - Express.js
 - TypeScript
 - PostgreSQL
+- Prisma (ORM)
 
 Padrões:
 
-- Arquitetura em camadas:
-  - Controllers
-  - Services
-  - Repositories
-
+- Organizar lógica diretamente em arquivos de rota (src/routes/).
+- Cada domínio tem seu próprio arquivo de rota: auth.ts, clinics.ts, appointments.ts.
+- Acessar o banco de dados diretamente via Prisma Client nas rotas.
 - Utilizar JWT para autenticação.
 - Utilizar bcrypt para hash de senhas.
 - Utilizar async/await.
-- Tratar erros adequadamente.
+- Tratar erros adequadamente com status HTTP corretos.
 - Criar rotas RESTful.
 
 Entidades principais:
 
-- Paciente
-- Clínica
-- Especialidade
-- Agendamento
+- Patient
+- Clinic
+- Appointment
+
+Especialidades são armazenadas como campo String na Clinic, não como tabela separada.
+A lista de especialidades válidas fica hardcoded em clinics.ts.
 
 Nunca gerar:
 

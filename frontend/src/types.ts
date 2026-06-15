@@ -18,6 +18,20 @@ export interface Clinic {
   disabledDays: string;
 }
 
+export interface Review {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+  patient: { id: string; fullName: string; photoUrl?: string | null };
+}
+
+export interface ClinicReviews {
+  reviews: Review[];
+  avg: number | null;
+  total: number;
+}
+
 export type AppointmentStatus = "PENDENTE" | "ACEITO" | "RECUSADO";
 
 export interface Appointment {

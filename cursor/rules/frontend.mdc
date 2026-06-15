@@ -2,17 +2,18 @@
 
 Stack:
 
-- Angular
+- React
+- Vite
+- React Router
 - TypeScript
-- Angular Material
 
 Padrões:
 
-- Utilizar componentes standalone.
-- Utilizar Reactive Forms.
-- Utilizar Services para chamadas HTTP.
-- Separar páginas e componentes reutilizáveis.
-- Utilizar interfaces TypeScript para tipagem.
+- Utilizar componentes funcionais com hooks.
+- Utilizar Context API para estado global (autenticação).
+- Utilizar funções utilitárias em api.ts para chamadas HTTP.
+- Separar páginas (src/pages/) e componentes reutilizáveis (src/components/).
+- Utilizar interfaces TypeScript para tipagem (src/types.ts).
 
 Telas principais:
 
@@ -22,6 +23,7 @@ Telas principais:
 - Busca de Clínicas
 - Agendamentos do Paciente
 - Agendamentos da Clínica
+- Disponibilidade da Clínica
 
 Priorizar:
 

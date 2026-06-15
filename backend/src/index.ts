@@ -8,6 +8,7 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import clinicRoutes from "./routes/clinics";
 import appointmentRoutes from "./routes/appointments";
+import reviewRoutes from "./routes/reviews";
 import { uploadDir } from "./upload";
 
 const app = express();
@@ -22,6 +23,7 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use("/auth", authRoutes);
 app.use("/clinics", clinicRoutes);
+app.use("/clinics/:clinicId/reviews", reviewRoutes);
 app.use("/appointments", appointmentRoutes);
 
 const PORT = Number(process.env.PORT) || 3333;

@@ -17,6 +17,7 @@ model Patient {
   photoUrl     String?
   createdAt    DateTime      @default(now())
   appointments Appointment[]
+  reviews      Review[]
 }
 
 model Clinic {
@@ -35,6 +36,7 @@ model Clinic {
   disabledDays String        @default("")
   createdAt    DateTime      @default(now())
   appointments Appointment[]
+  reviews      Review[]
 }
 
 enum AppointmentStatus {
@@ -53,4 +55,17 @@ model Appointment {
   reason    String?
   status    AppointmentStatus @default(PENDENTE)
   createdAt DateTime          @default(now())
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  patientId String
+  clinic    Clinic   @relation(fields: [clinicId], references: [id])
+  clinicId  String
+  rating    Float
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@unique([patientId, clinicId])
 }

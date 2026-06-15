@@ -28,6 +28,7 @@ Tecnologias:
 * Node.js
 * Express.js
 * TypeScript
+* Prisma (ORM)
 
 Responsabilidades:
 
@@ -41,14 +42,15 @@ Responsabilidades:
 
 Tecnologia:
 
-* PostgreSQL
+* PostgreSQL (acessado via Prisma)
 
-Tabelas principais:
+Modelos principais:
 
-* Pacientes
-* Clínicas
-* Especialidades
-* Agendamentos
+* Patient
+* Clinic
+* Appointment
+
+Especialidades não são uma tabela separada. São armazenadas como campo `String` no modelo `Clinic` e validadas contra uma lista fixa no backend.
 
 ## Autenticação
 

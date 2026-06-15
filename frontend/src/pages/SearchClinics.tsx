@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { apiGet, apiSend } from "../api";
-import { Clinic } from "../types";
+import { Clinic, ClinicReviews } from "../types";
+import StarRating from "../components/StarRating";
+import Avatar from "../components/Avatar";
 
 const SPECIALTIES = [
   "Dermatologista",
@@ -12,12 +14,23 @@ const SPECIALTIES = [
   "Nutricionista",
 ];
 
+interface ClinicWithReviews extends Clinic {
+  avg: number | null;
+  totalReviews: number;
+}
+
 export default function SearchClinics() {
   const [name, setName] = useState("");
   const [specialty, setSpecialty] = useState("");
-  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [clinics, setClinics] = useState<ClinicWithReviews[]>([]);
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+
+  // id da clínica com o painel de avaliação aberto
+  const [reviewingId, setReviewingId] = useState<string | null>(null);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   async function search() {
     setLoading(true);
@@ -25,8 +38,15 @@ export default function SearchClinics() {
     if (name) params.set("name", name);
     if (specialty) params.set("specialty", specialty);
     try {
-      const data = await apiGet(`/clinics?${params.toString()}`);
-      setClinics(data);
+      const data: Clinic[] = await apiGet(`/clinics?${params.toString()}`);
+      // busca médias em paralelo
+      const withReviews: ClinicWithReviews[] = await Promise.all(
+        data.map(async (c) => {
+          const rv: ClinicReviews = await apiGet(`/clinics/${c.id}/reviews`);
+          return { ...c, avg: rv.avg, totalReviews: rv.total };
+        })
+      );
+      setClinics(withReviews);
     } finally {
       setLoading(false);
     }
@@ -44,20 +64,47 @@ export default function SearchClinics() {
     if (!date) return;
     try {
       await apiSend("/appointments", "POST", { clinicId: clinic.id, date });
-      setMsg(`Agendamento solicitado em ${clinic.clinicName}. Veja em "Agendamentos".`);
+      setMsg(`Agendamento solicitado em ${clinic.clinicName}. Veja em "Meus Agendamentos".`);
     } catch (err) {
       setMsg((err as Error).message);
     }
   }
 
+  function openReview(clinicId: string) {
+    setReviewingId(clinicId);
+    setReviewRating(0);
+    setReviewComment("");
+  }
+
+  async function submitReview(clinicId: string) {
+    if (reviewRating === 0) {
+      setMsg("Selecione uma nota antes de enviar.");
+      return;
+    }
+    setReviewLoading(true);
+    try {
+      await apiSend(`/clinics/${clinicId}/reviews`, "POST", {
+        rating: reviewRating,
+        comment: reviewComment || undefined,
+      });
+      setReviewingId(null);
+      setMsg("Avaliação enviada!");
+      search(); // atualiza médias
+    } catch (err) {
+      setMsg((err as Error).message);
+    } finally {
+      setReviewLoading(false);
+    }
+  }
+
   return (
     <div>
-      <h2>Buscar Clinicas</h2>
+      <h2>Buscar Clínicas</h2>
 
       <div className="card">
         <div className="row">
           <div className="field">
-            <label>Nome da Clinica</label>
+            <label>Nome da Clínica</label>
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Buscar por nome" />
           </div>
           <div className="field">
@@ -65,16 +112,12 @@ export default function SearchClinics() {
             <select value={specialty} onChange={(e) => setSpecialty(e.target.value)}>
               <option value="">Todas</option>
               {SPECIALTIES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
+                <option key={s} value={s}>{s}</option>
               ))}
             </select>
           </div>
           <div className="field" style={{ justifyContent: "flex-end" }}>
-            <button className="btn" onClick={search}>
-              Buscar
-            </button>
+            <button className="btn" onClick={search}>Buscar</button>
           </div>
         </div>
       </div>
@@ -84,22 +127,65 @@ export default function SearchClinics() {
       {loading ? (
         <p className="muted">Carregando...</p>
       ) : clinics.length === 0 ? (
-        <p className="muted">Nenhuma clinica encontrada.</p>
+        <p className="muted">Nenhuma clínica encontrada.</p>
       ) : (
         clinics.map((c) => (
-          <div className="card list-item" key={c.id}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <img className="avatar" src={c.photoUrl || ""} alt="" />
-              <div>
-                <strong>{c.clinicName}</strong>
-                <div className="muted">
-                  {c.specialty} · {c.openTime}–{c.closeTime}
+          <div className="card" key={c.id}>
+            <div className="list-item">
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <Avatar src={c.photoUrl} type="CLINIC" />
+                <div>
+                  <strong>{c.clinicName}</strong>
+                  <div className="muted">{c.specialty} · {c.openTime}–{c.closeTime}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+                    <StarRating value={c.avg ?? 0} size={18} />
+                    <span className="muted">
+                      {c.avg !== null ? c.avg.toFixed(1) : "—"} ({c.totalReviews})
+                    </span>
+                  </div>
                 </div>
               </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className="btn secondary" onClick={() => openReview(c.id)}>
+                  Avaliar
+                </button>
+                <button className="btn" onClick={() => requestAppointment(c)}>
+                  Agendar
+                </button>
+              </div>
             </div>
-            <button className="btn" onClick={() => requestAppointment(c)}>
-              Agendar
-            </button>
+
+            {reviewingId === c.id && (
+              <div style={{ marginTop: 16, borderTop: "1px solid #e5e7eb", paddingTop: 16 }}>
+                <p style={{ margin: "0 0 8px", fontWeight: 500 }}>Sua avaliação</p>
+                <div style={{ marginBottom: 12 }}>
+                  <StarRating value={reviewRating} onChange={setReviewRating} size={30} />
+                  {reviewRating > 0 && (
+                    <span className="muted" style={{ marginLeft: 8 }}>{reviewRating} estrelas</span>
+                  )}
+                </div>
+                <div className="field">
+                  <label>Comentário (opcional)</label>
+                  <input
+                    value={reviewComment}
+                    onChange={(e) => setReviewComment(e.target.value)}
+                    placeholder="Conte sua experiência..."
+                  />
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button
+                    className="btn"
+                    disabled={reviewLoading}
+                    onClick={() => submitReview(c.id)}
+                  >
+                    {reviewLoading ? "Enviando..." : "Enviar"}
+                  </button>
+                  <button className="btn secondary" onClick={() => setReviewingId(null)}>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))
       )}
