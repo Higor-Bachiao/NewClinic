@@ -8,6 +8,7 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import clinicRoutes from "./routes/clinics";
 import appointmentRoutes from "./routes/appointments";
+import profileRoutes from "./routes/profile";
 import { uploadDir } from "./upload";
 
 const app = express();
@@ -23,6 +24,7 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/auth", authRoutes);
 app.use("/clinics", clinicRoutes);
 app.use("/appointments", appointmentRoutes);
+app.use("/profile", profileRoutes);
 
 const PORT = Number(process.env.PORT) || 3333;
 app.listen(PORT, () => {

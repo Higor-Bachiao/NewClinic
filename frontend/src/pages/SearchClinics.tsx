@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { apiGet, apiSend } from "../api";
+import { apiGet } from "../api";
 import { Clinic } from "../types";
+import { useToast } from "../components/Toast";
+import ScheduleModal from "../components/ScheduleModal";
+import Icon from "../components/Icon";
 
 const SPECIALTIES = [
   "Dermatologista",
@@ -13,11 +16,12 @@ const SPECIALTIES = [
 ];
 
 export default function SearchClinics() {
+  const toast = useToast();
   const [name, setName] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [selected, setSelected] = useState<Clinic | null>(null);
 
   async function search() {
     setLoading(true);
@@ -27,6 +31,8 @@ export default function SearchClinics() {
     try {
       const data = await apiGet(`/clinics?${params.toString()}`);
       setClinics(data);
+    } catch (err) {
+      toast.error((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -36,19 +42,6 @@ export default function SearchClinics() {
     search();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function requestAppointment(clinic: Clinic) {
-    const date = prompt(
-      `Agendar em "${clinic.clinicName}"\nAtende das ${clinic.openTime} as ${clinic.closeTime}.\nInforme data e hora (ex: 2026-07-10 14:30):`
-    );
-    if (!date) return;
-    try {
-      await apiSend("/appointments", "POST", { clinicId: clinic.id, date });
-      setMsg(`Agendamento solicitado em ${clinic.clinicName}. Veja em "Agendamentos".`);
-    } catch (err) {
-      setMsg((err as Error).message);
-    }
-  }
 
   return (
     <div>
@@ -79,12 +72,13 @@ export default function SearchClinics() {
         </div>
       </div>
 
-      {msg && <div className="card" style={{ background: "#ecfdf5" }}>{msg}</div>}
-
       {loading ? (
         <p className="muted">Carregando...</p>
       ) : clinics.length === 0 ? (
-        <p className="muted">Nenhuma clinica encontrada.</p>
+        <div className="empty-state">
+          <Icon name="search_off" size={48} className="empty-icon" />
+          <p>Nenhuma clinica encontrada. Tente outro nome ou especialidade.</p>
+        </div>
       ) : (
         clinics.map((c) => (
           <div className="card list-item" key={c.id}>
@@ -97,12 +91,15 @@ export default function SearchClinics() {
                 </div>
               </div>
             </div>
-            <button className="btn" onClick={() => requestAppointment(c)}>
+            <button className="btn" onClick={() => setSelected(c)}>
+              <Icon name="event_available" size={18} />
               Agendar
             </button>
           </div>
         ))
       )}
+
+      <ScheduleModal clinic={selected} open={!!selected} onClose={() => setSelected(null)} />
     </div>
   );
 }

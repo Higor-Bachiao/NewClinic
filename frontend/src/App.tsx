@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import SearchClinics from "./pages/SearchClinics";
 import Appointments from "./pages/Appointments";
 import Availability from "./pages/Availability";
+import Profile from "./pages/Profile";
+import Icon from "./components/Icon";
 import { Role } from "./types";
 import { ReactNode } from "react";
 
@@ -16,11 +18,31 @@ function Navbar() {
   return (
     <div className="navbar">
       <span className="brand">NewClinic</span>
-      <div>
-        {user.role === "PATIENT" && <Link to="/buscar">Buscar Clinicas</Link>}
-        {user.role === "CLINIC" && <Link to="/disponibilidade">Disponibilidade</Link>}
-        <Link to="/agendamentos">Agendamentos</Link>
-        <span style={{ marginRight: 16 }}>Ola, {user.name}</span>
+      <div className="nav-links">
+        {user.role === "PATIENT" && (
+          <Link to="/buscar">
+            <Icon name="search" size={18} />
+            Buscar Clinicas
+          </Link>
+        )}
+        {user.role === "CLINIC" && (
+          <Link to="/disponibilidade">
+            <Icon name="schedule" size={18} />
+            Disponibilidade
+          </Link>
+        )}
+        <Link to="/agendamentos">
+          <Icon name="event" size={18} />
+          Agendamentos
+        </Link>
+        <Link to="/perfil">
+          <Icon name="manage_accounts" size={18} />
+          Meu Perfil
+        </Link>
+        <span className="nav-greeting">
+          <Icon name="account_circle" size={18} />
+          Ola, {user.name}
+        </span>
         <button
           className="btn secondary"
           onClick={() => {
@@ -28,6 +50,7 @@ function Navbar() {
             navigate("/login");
           }}
         >
+          <Icon name="logout" size={18} />
           Sair
         </button>
       </div>
@@ -75,6 +98,14 @@ export default function App() {
             element={
               <Protected>
                 <Appointments />
+              </Protected>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <Protected>
+                <Profile />
               </Protected>
             }
           />

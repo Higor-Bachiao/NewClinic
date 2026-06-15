@@ -40,3 +40,14 @@ export async function apiUpload(path: string, formData: FormData) {
   });
   return handle(res);
 }
+
+// Multipart autenticado (ex: editar perfil com foto). Nao define Content-Type
+// manualmente para o browser incluir o boundary correto.
+export async function apiUploadSend(path: string, method: string, formData: FormData) {
+  const res = await fetch(`${BASE}${path}`, {
+    method,
+    headers: { Authorization: `Bearer ${getToken()}` },
+    body: formData,
+  });
+  return handle(res);
+}
