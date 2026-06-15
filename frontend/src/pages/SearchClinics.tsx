@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { apiGet, apiSend } from "../api";
 import { Clinic, ClinicReviews } from "../types";
 import StarRating from "../components/StarRating";
 import Avatar from "../components/Avatar";
+=======
+import { apiGet } from "../api";
+import { Clinic } from "../types";
+import { useToast } from "../components/Toast";
+import ScheduleModal from "../components/ScheduleModal";
+import Icon from "../components/Icon";
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
 
 const SPECIALTIES = [
   "Dermatologista",
@@ -20,11 +28,12 @@ interface ClinicWithReviews extends Clinic {
 }
 
 export default function SearchClinics() {
+  const toast = useToast();
   const [name, setName] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [clinics, setClinics] = useState<ClinicWithReviews[]>([]);
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [selected, setSelected] = useState<Clinic | null>(null);
 
   // id da clínica com o painel de avaliação aberto
   const [reviewingId, setReviewingId] = useState<string | null>(null);
@@ -38,6 +47,7 @@ export default function SearchClinics() {
     if (name) params.set("name", name);
     if (specialty) params.set("specialty", specialty);
     try {
+<<<<<<< HEAD
       const data: Clinic[] = await apiGet(`/clinics?${params.toString()}`);
       // busca médias em paralelo
       const withReviews: ClinicWithReviews[] = await Promise.all(
@@ -47,6 +57,12 @@ export default function SearchClinics() {
         })
       );
       setClinics(withReviews);
+=======
+      const data = await apiGet(`/clinics?${params.toString()}`);
+      setClinics(data);
+    } catch (err) {
+      toast.error((err as Error).message);
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
     } finally {
       setLoading(false);
     }
@@ -57,6 +73,7 @@ export default function SearchClinics() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+<<<<<<< HEAD
   async function requestAppointment(clinic: Clinic) {
     const date = prompt(
       `Agendar em "${clinic.clinicName}"\nAtende das ${clinic.openTime} as ${clinic.closeTime}.\nInforme data e hora (ex: 2026-07-10 14:30):`
@@ -97,6 +114,8 @@ export default function SearchClinics() {
     }
   }
 
+=======
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
   return (
     <div>
       <h2>Buscar Clínicas</h2>
@@ -122,12 +141,17 @@ export default function SearchClinics() {
         </div>
       </div>
 
-      {msg && <div className="card" style={{ background: "#ecfdf5" }}>{msg}</div>}
-
       {loading ? (
         <p className="muted">Carregando...</p>
       ) : clinics.length === 0 ? (
+<<<<<<< HEAD
         <p className="muted">Nenhuma clínica encontrada.</p>
+=======
+        <div className="empty-state">
+          <Icon name="search_off" size={48} className="empty-icon" />
+          <p>Nenhuma clinica encontrada. Tente outro nome ou especialidade.</p>
+        </div>
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
       ) : (
         clinics.map((c) => (
           <div className="card" key={c.id}>
@@ -154,6 +178,7 @@ export default function SearchClinics() {
                 </button>
               </div>
             </div>
+<<<<<<< HEAD
 
             {reviewingId === c.id && (
               <div style={{ marginTop: 16, borderTop: "1px solid #e5e7eb", paddingTop: 16 }}>
@@ -186,9 +211,17 @@ export default function SearchClinics() {
                 </div>
               </div>
             )}
+=======
+            <button className="btn" onClick={() => setSelected(c)}>
+              <Icon name="event_available" size={18} />
+              Agendar
+            </button>
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
           </div>
         ))
       )}
+
+      <ScheduleModal clinic={selected} open={!!selected} onClose={() => setSelected(null)} />
     </div>
   );
 }

@@ -5,7 +5,13 @@ import Register from "./pages/Register";
 import SearchClinics from "./pages/SearchClinics";
 import Appointments from "./pages/Appointments";
 import Availability from "./pages/Availability";
+<<<<<<< HEAD
 import ClinicReviews from "./pages/ClinicReviews";
+=======
+import Profile from "./pages/Profile";
+import Icon from "./components/Icon";
+import { Role } from "./types";
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
 import { ReactNode } from "react";
 
 function Header() {
@@ -16,9 +22,45 @@ function Header() {
   return (
     <div className="header">
       <span className="brand">NewClinic</span>
+<<<<<<< HEAD
       <div className="header-user">
         <span className="muted">Olá, {user.name}</span>
         <button className="btn secondary" onClick={() => { logout(); navigate("/login"); }}>
+=======
+      <div className="nav-links">
+        {user.role === "PATIENT" && (
+          <Link to="/buscar">
+            <Icon name="search" size={18} />
+            Buscar Clinicas
+          </Link>
+        )}
+        {user.role === "CLINIC" && (
+          <Link to="/disponibilidade">
+            <Icon name="schedule" size={18} />
+            Disponibilidade
+          </Link>
+        )}
+        <Link to="/agendamentos">
+          <Icon name="event" size={18} />
+          Agendamentos
+        </Link>
+        <Link to="/perfil">
+          <Icon name="manage_accounts" size={18} />
+          Meu Perfil
+        </Link>
+        <span className="nav-greeting">
+          <Icon name="account_circle" size={18} />
+          Ola, {user.name}
+        </span>
+        <button
+          className="btn secondary"
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+        >
+          <Icon name="logout" size={18} />
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
           Sair
         </button>
       </div>
@@ -102,6 +144,7 @@ export default function App() {
             }
           />
           <Route
+<<<<<<< HEAD
             path="/avaliacoes"
             element={
               <Protected role="CLINIC">
@@ -109,6 +152,16 @@ export default function App() {
               </Protected>
             }
           />
+=======
+            path="/perfil"
+            element={
+              <Protected>
+                <Profile />
+              </Protected>
+            }
+          />
+
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
           <Route path="*" element={<Navigate to={user ? "/agendamentos" : "/login"} replace />} />
         </Routes>
       </div>

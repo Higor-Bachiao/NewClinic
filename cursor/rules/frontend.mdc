@@ -9,11 +9,19 @@ Stack:
 
 Padrões:
 
+<<<<<<< HEAD
 - Utilizar componentes funcionais com hooks.
 - Utilizar Context API para estado global (autenticação).
 - Utilizar funções utilitárias em api.ts para chamadas HTTP.
 - Separar páginas (src/pages/) e componentes reutilizáveis (src/components/).
 - Utilizar interfaces TypeScript para tipagem (src/types.ts).
+=======
+- Utilizar componentes funcionais com Hooks.
+- Separar páginas (`src/pages/`) e componentes reutilizáveis (`src/components/`).
+- Centralizar chamadas HTTP em `src/api.ts`.
+- Utilizar interfaces TypeScript para tipagem (`src/types.ts`).
+- Estilização com CSS simples (sem framework de UI).
+>>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
 
 Telas principais:
 

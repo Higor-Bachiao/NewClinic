@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiGet, apiSend } from "../api";
+import { useToast } from "../components/Toast";
 
 const DAYS = [
   { value: 0, label: "Domingo" },
@@ -12,10 +13,10 @@ const DAYS = [
 ];
 
 export default function Availability() {
+  const toast = useToast();
   const [openTime, setOpenTime] = useState("08:00");
   const [closeTime, setCloseTime] = useState("18:00");
   const [disabledDays, setDisabledDays] = useState<number[]>([]);
-  const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,12 +37,15 @@ export default function Availability() {
   }
 
   async function save() {
-    setMsg("");
+    if (openTime >= closeTime) {
+      toast.warning("O horario de abertura deve ser antes do fechamento.");
+      return;
+    }
     try {
       await apiSend("/clinics/me/availability", "PUT", { openTime, closeTime, disabledDays });
-      setMsg("Disponibilidade salva com sucesso!");
+      toast.success("Disponibilidade salva com sucesso!");
     } catch (err) {
-      setMsg((err as Error).message);
+      toast.error((err as Error).message);
     }
   }
 
@@ -81,7 +85,6 @@ export default function Availability() {
         <button className="btn" onClick={save}>
           Salvar
         </button>
-        {msg && <div className="muted" style={{ marginTop: 12 }}>{msg}</div>}
       </div>
     </div>
   );
