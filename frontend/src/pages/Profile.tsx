@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiGet, apiUploadSend } from "../api";
+import { apiGet, apiUploadSend, assetUrl } from "../api";
 import { useAuth } from "../auth";
 import { useToast } from "../components/Toast";
 import Icon from "../components/Icon";
@@ -127,7 +127,7 @@ export default function Profile() {
 
   if (loading) return <p className="muted">Carregando...</p>;
 
-  const photoSrc = preview || currentPhoto || "";
+  const photoSrc = preview || assetUrl(currentPhoto) || "";
 
   return (
     <div>

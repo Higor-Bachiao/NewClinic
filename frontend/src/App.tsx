@@ -1,17 +1,13 @@
-import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "./auth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SearchClinics from "./pages/SearchClinics";
 import Appointments from "./pages/Appointments";
 import Availability from "./pages/Availability";
-<<<<<<< HEAD
 import ClinicReviews from "./pages/ClinicReviews";
-=======
 import Profile from "./pages/Profile";
 import Icon from "./components/Icon";
-import { Role } from "./types";
->>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
 import { ReactNode } from "react";
 
 function Header() {
@@ -22,11 +18,6 @@ function Header() {
   return (
     <div className="header">
       <span className="brand">NewClinic</span>
-<<<<<<< HEAD
-      <div className="header-user">
-        <span className="muted">Olá, {user.name}</span>
-        <button className="btn secondary" onClick={() => { logout(); navigate("/login"); }}>
-=======
       <div className="nav-links">
         {user.role === "PATIENT" && (
           <Link to="/buscar">
@@ -60,7 +51,6 @@ function Header() {
           }}
         >
           <Icon name="logout" size={18} />
->>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
           Sair
         </button>
       </div>
@@ -144,7 +134,6 @@ export default function App() {
             }
           />
           <Route
-<<<<<<< HEAD
             path="/avaliacoes"
             element={
               <Protected role="CLINIC">
@@ -152,7 +141,7 @@ export default function App() {
               </Protected>
             }
           />
-=======
+          <Route
             path="/perfil"
             element={
               <Protected>
@@ -160,8 +149,6 @@ export default function App() {
               </Protected>
             }
           />
-
->>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
           <Route path="*" element={<Navigate to={user ? "/agendamentos" : "/login"} replace />} />
         </Routes>
       </div>

@@ -1,5 +1,15 @@
-// Cliente HTTP simples. Usa o proxy /api configurado no Vite.
-const BASE = "/api";
+// Cliente HTTP simples.
+// Em produção, VITE_API_URL aponta para o backend (ex: https://...onrender.com).
+// Em dev fica indefinido e usamos o proxy /api configurado no Vite.
+const BASE = import.meta.env.VITE_API_URL ?? "/api";
+
+// Monta a URL de um arquivo servido pelo backend (ex: fotos em /uploads/...).
+// Em dev (sem VITE_API_URL) mantém o caminho relativo para o proxy do Vite.
+const FILES_BASE = import.meta.env.VITE_API_URL ?? "";
+export function assetUrl(path?: string | null): string | undefined {
+  if (!path) return undefined;
+  return `${FILES_BASE}${path}`;
+}
 
 function getToken(): string | null {
   return localStorage.getItem("token");
