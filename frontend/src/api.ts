@@ -8,6 +8,8 @@ const BASE = import.meta.env.VITE_API_URL ?? "/api";
 const FILES_BASE = import.meta.env.VITE_API_URL ?? "";
 export function assetUrl(path?: string | null): string | undefined {
   if (!path) return undefined;
+  // URLs absolutas (ex: fotos externas do Unsplash) sao usadas como estao.
+  if (/^https?:\/\//.test(path)) return path;
   return `${FILES_BASE}${path}`;
 }
 
