@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useNavigate, useLocation, Link } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation, NavLink } from "react-router-dom";
 import { useAuth } from "./auth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -17,28 +17,28 @@ function Header() {
 
   return (
     <div className="header">
-      <span className="brand">NewClinic</span>
+      <span className="brand">Clínica Facil</span>
       <div className="nav-links">
         {user.role === "PATIENT" && (
-          <Link to="/buscar">
+          <NavLink to="/buscar">
             <Icon name="search" size={18} />
             Buscar Clinicas
-          </Link>
+          </NavLink>
         )}
         {user.role === "CLINIC" && (
-          <Link to="/disponibilidade">
+          <NavLink to="/disponibilidade">
             <Icon name="schedule" size={18} />
             Disponibilidade
-          </Link>
+          </NavLink>
         )}
-        <Link to="/agendamentos">
+        <NavLink to="/agendamentos">
           <Icon name="event" size={18} />
           Agendamentos
-        </Link>
-        <Link to="/perfil">
+        </NavLink>
+        <NavLink to="/perfil">
           <Icon name="manage_accounts" size={18} />
           Meu Perfil
-        </Link>
+        </NavLink>
         <span className="nav-greeting">
           <Icon name="account_circle" size={18} />
           Ola, {user.name}
