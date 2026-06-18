@@ -4,15 +4,11 @@ dotenv.config({ path: `${process.cwd()}/env/.env` });
 
 import express from "express";
 import cors from "cors";
-import path from "path";
 import authRoutes from "./routes/auth";
 import clinicRoutes from "./routes/clinics";
 import appointmentRoutes from "./routes/appointments";
-<<<<<<< HEAD
 import reviewRoutes from "./routes/reviews";
-=======
 import profileRoutes from "./routes/profile";
->>>>>>> 016a80bd96e41875673ced3ef140113dd687dbfa
 import { uploadDir } from "./upload";
 
 const app = express();
