@@ -57,6 +57,11 @@ npm run dev                   # app em http://localhost:5173
 
 O Vite faz proxy de `/api` e `/uploads` para o backend em `localhost:3333`.
 
+Em desenvolvimento não é preciso configurar nada. Em produção, defina a variável
+`VITE_API_URL` com a origem do backend (ex.: `https://meu-backend.onrender.com`);
+ela é usada em build-time para as chamadas de API e para as imagens em `/uploads`
+(veja `src/api.ts`).
+
 ## Usuários de teste (após `npm run seed`)
 
 - **Paciente:** `paciente@teste.com` / `123456`
@@ -80,3 +85,37 @@ O Vite faz proxy de `/api` e `/uploads` para o backend em `localhost:3333`.
 | PATCH | `/appointments/:id/status` | clínica | Aceitar / Recusar |
 | GET | `/profile/me` | autenticado | Dados do perfil logado |
 | PUT | `/profile/me` | autenticado | Atualizar perfil (aceita upload `photo`) |
+
+## Deploy (Render)
+
+O projeto sobe como **dois serviços** no Render.
+
+### Backend — Web Service
+
+| Campo | Valor |
+| --- | --- |
+| Root Directory | `backend` |
+| Build Command | `npm install && npm run prisma:generate && npm run build` |
+| Start Command | `npm start` |
+| Env vars | `DATABASE_URL`, `JWT_SECRET` (o `PORT` é injetado pelo Render) |
+
+### Frontend — Static Site
+
+| Campo | Valor |
+| --- | --- |
+| Root Directory | `frontend` |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `dist` |
+| Env var | `VITE_API_URL` = URL do backend (ex.: `https://meu-backend.onrender.com`) |
+
+Como é uma SPA, adicione uma **Rewrite Rule** (Settings → Redirects/Rewrites)
+para o roteamento client-side funcionar:
+
+| Source | Destination | Action |
+| --- | --- | --- |
+| `/*` | `/index.html` | Rewrite |
+
+> ⚠️ **Uploads não persistem no plano free.** As fotos são gravadas no disco local
+> do backend (`backend/uploads/`), que é efêmero no Render free — é zerado a cada
+> deploy/restart. Para persistir, use um **Persistent Disk** (plano pago) ou um
+> storage externo (ex.: Supabase Storage).
